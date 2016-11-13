@@ -65,16 +65,26 @@ public class DataStructure {
     }
     
     //This is the answer to Exercise 2a. It works.
-    public void print(DataStructureIterator iterator) {
-        //Answer to Exercise 2b. It doesn't work. Yet. 
-        DataStructureIterator oddIterator = new DataStructureIterator() {
+    public void print(DataStructureIterator iterator) {    
+        while (iterator.hasNext() == true) {
+            System.out.print(iterator.next() + " ");
+        }     
+        System.out.println();   
+    };
+    
+    interface DataStructureIterator extends java.util.Iterator<Integer> { } 
+
+    // Inner class implements the DataStructureIterator interface,
+    // which extends the Iterator<Integer> interface
+    
+    //This might work for 2b but I don't have a compiler so I don't know?
+    DataStructureIterator oddIterator = new DataStructureIterator() {
             int nextIndex = 1;
             
             @Override
             public boolean hasNext() {
                 return (nextIndex <= SIZE - 1);
-            }
-            
+            } 
             @Override
             public Integer next() {
                 Integer retValue = Integer.valueOf(arrayOfInts[nextIndex]);
@@ -82,18 +92,6 @@ public class DataStructure {
                 return retValue;           
             }
         };
-        
-        while (iterator.hasNext() == true) {
-            System.out.print(iterator.next() + " ");
-        }
-        System.out.println();
-        
-    }
-    
-    interface DataStructureIterator extends java.util.Iterator<Integer> { } 
-
-    // Inner class implements the DataStructureIterator interface,
-    // which extends the Iterator<Integer> interface
     
     private class EvenIterator implements DataStructureIterator {
         
@@ -124,6 +122,7 @@ public class DataStructure {
         DataStructure ds = new DataStructure();
         ds.printEven();
         ds.print(ds.createEvenIterator());
+        ds.print(oddIterator);
 
         
     }
