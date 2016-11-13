@@ -5,6 +5,7 @@
  */
 package datastructure;
 
+
 /*
  * Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved.
  *
@@ -40,7 +41,7 @@ public class DataStructure {
     
     // Create an array
     private final static int SIZE = 15;
-    private int[] arrayOfInts = new int[SIZE];
+    private static int[] arrayOfInts = new int[SIZE];
     
     public DataStructure() {
         // fill the array with ascending integer values
@@ -72,13 +73,16 @@ public class DataStructure {
         System.out.println();   
     };
     
-    interface DataStructureIterator extends java.util.Iterator<Integer> { } 
+    interface DataStructureIterator extends java.util.Iterator<Integer> { }
+    public interface LambdaIterator {
+        public void abstractIterate();
+    }
 
     // Inner class implements the DataStructureIterator interface,
     // which extends the Iterator<Integer> interface
     
     //This might work for 2b but I don't have a compiler so I don't know?
-    DataStructureIterator oddIterator = new DataStructureIterator() {
+    static DataStructureIterator oddIterator = new DataStructureIterator() {
             int nextIndex = 1;
             
             @Override
@@ -92,6 +96,10 @@ public class DataStructure {
                 return retValue;           
             }
         };
+    
+    void print(LambdaIterator iterator) {
+        
+    }
     
     private class EvenIterator implements DataStructureIterator {
         
@@ -122,7 +130,29 @@ public class DataStructure {
         DataStructure ds = new DataStructure();
         ds.printEven();
         ds.print(ds.createEvenIterator());
+        //The following both implement anonymous classes, though differently.
+        // oddIterator is defined above, and the class that it is a part of is never directly named.
+        // The class is defined and instantiated in the same chunk of code, then given the variable
+        // oddIterator in order to be called on later. The second ds.print takes a more direct route;
+        // the class is defined and instantiated directly in the same space as the parameter it's being
+        // called through. If we only need to use this class once, this is preferred. If we may have
+        // additional uses for it, the former method is preferred. 
         ds.print(oddIterator);
+        ds.print(new DataStructureIterator() {
+            int nextIndex = 1;
+            
+            @Override
+            public boolean hasNext() {
+                return (nextIndex <= SIZE - 1);
+            } 
+            @Override
+            public Integer next() {
+                Integer retValue = Integer.valueOf(arrayOfInts[nextIndex]);
+                nextIndex +=2;
+                return retValue;           
+            }
+        }
+        );
 
         
     }
